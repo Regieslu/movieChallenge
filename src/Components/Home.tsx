@@ -2,24 +2,37 @@ import React, { useState } from "react";
 import axios from 'axios';
 import Search from "../Components/Common/Search";
 import Detail from "./Detail";
+import Pagination from "./Common/pagination";
+
 // import "./App.css";
 
 // interface para el genero
-export interface movieResult {
+export interface MovieCatalog {
   id: number,
   title: string,
   poster_path: string,
+
+}
+export interface MovieResult {
+  original_title: string,
+  poster_path: string,
   vote_average: number,
   overview: string,
-  // genre: genreInterface
+  release_date: string,
+  genres: Genres[],
 }
 
+export interface Genres {
+    "id": number, 
+    "name": string,
+}
 
 function Home() { //comonente padre de sarch y detail 
+  const [currentPage, setCurrentPage] = useState(1)
   const [state, setState] = useState({
     movieName: "",
-    results: [] as movieResult[],
-    selected: {} as movieResult,
+    results: [] as MovieCatalog[],
+    selected: {} as MovieResult,
   });
   const apiurl = "https://api.themoviedb.org/3";
   const initialCatalog = "/trending/movie/day?language=en-US";
@@ -43,7 +56,7 @@ function Home() { //comonente padre de sarch y detail
         headers: headers
       }).then(
         ({ data }) => {
-          const results: movieResult[] = data.results;
+          const results: MovieCatalog[] = data.results;
           setState((prevState) => {
             return {
               ...prevState,
@@ -59,7 +72,7 @@ function Home() { //comonente padre de sarch y detail
     axios(apiurl + "/movie/" + id, {
       headers: headers
     }).then(({ data }) => {
-      const result = data as movieResult
+      const result = data as MovieResult
       setState((prevState) => {
         return { ...prevState, selected: result };
       });
@@ -68,16 +81,27 @@ function Home() { //comonente padre de sarch y detail
 
   const closeDetail = () => {
     setState((prevState) => {
-      return { ...prevState, selected: {} as movieResult };
+      return { ...prevState, selected: {} as MovieResult };
     });
   };
 
-  const getHomeCatalog = () => {
-    axios(apiurl + initialCatalog, {
-      headers: headers
+  const updatePageAndCatalog = (page: number) => {
+    setCurrentPage(page);
+    axios(apiurl + `${initialCatalog}&page=${page}`, {
+      headers: headers,
     }).then(({ data }) => {
       setState((prevState) => {
-        return { ...prevState, results: data.results }
+        return { ...prevState, results: data.results };
+      });
+    });
+  }
+
+  const getHomeCatalog = () => {
+    axios(apiurl + initialCatalog, {
+      headers: headers,
+    }).then(({ data }) => {
+      setState((prevState) => {
+        return { ...prevState, results: data.results };
       });
     });
   }
@@ -92,9 +116,8 @@ function Home() { //comonente padre de sarch y detail
           searchInput={searchInput}
           search={search}
         />
-
         <div className="container">
-          {state.results.length && state.results.map((e: movieResult) => (
+          {state.results.length && state.results.map((e: MovieCatalog) => (
             <div
               key={e.id}
               className="item"
@@ -118,7 +141,7 @@ function Home() { //comonente padre de sarch y detail
           getHomeCatalog()
         }
 
-        {typeof state.selected.title !=
+        {typeof state.selected.original_title !=
           "undefined" ? (
           <Detail
             selected={state.selected}
@@ -127,6 +150,9 @@ function Home() { //comonente padre de sarch y detail
         ) : (
           false
         )}
+        <Pagination
+         setPage={(page) => updatePageAndCatalog(page)} page={currentPage}
+        />
       </main>
     </div>
   );
