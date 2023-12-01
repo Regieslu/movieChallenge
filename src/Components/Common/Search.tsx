@@ -1,5 +1,5 @@
 import React from "react";
-// import "./Search.css";
+import "../../styles/Search.css";
 
 interface Props {
   searchInput(e: React.FormEvent<HTMLInputElement>): void;

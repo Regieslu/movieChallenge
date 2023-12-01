@@ -1,8 +1,21 @@
-import { movieResult } from "./Home"
+import { Genres, MovieResult } from "./Home"
 
 interface Props {
-  selected: movieResult;
+  selected: MovieResult;
   closeDetail(): void;
+}
+const renderGenres = (genres: Genres[]) => {
+  return ( 
+    <div>
+      <p>
+        Genres: 
+      </p>
+      <ul>
+        {genres.map(item => <li key={item.id}>{item.name}</li>)}
+      </ul>
+      </div>
+    
+  );
 }
 
 function Detail(props: Props) {
@@ -11,10 +24,16 @@ function Detail(props: Props) {
   return (
     <section className="detail">
       <div className="content">
-        <h2>{selected.title}</h2>
+        <h2>{selected.original_title}</h2>
         <p className="rating">
           Rating: {selected.vote_average}
         </p>
+        <p>
+        Date: {selected.release_date}
+        </p>
+        <div>
+          {renderGenres(selected.genres)}
+        </div>
 
         <div className="about">
           <img src={posterPath} alt="" />
