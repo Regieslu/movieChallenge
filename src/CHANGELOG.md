@@ -50,3 +50,47 @@ Las configuraciones que se realizaron en la web no necesitaron cambios posterior
 ### Removed
 
 No se eliminaron secciones ni funciones. 
+
+## <Demo 3> - <2023-11-29>
+
+### Sprint learnings
+
+Implementación de filtros en la web. 
+
+### Added
+
+Se corrigen errores en el filtrado y ordenamiento de la data.
+
+### Changed
+
+No hubo cambios en sí sino correcciones en las funciones de filtrado y ordenamiento.
+
+### Fixed
+
+Se estructuró de manera más ordenada el código en general. 
+
+### Removed
+
+No se eliminaron secciones ni funciones. 
+
+## <Demo 4> - <2023-12-06>
+
+### Sprint learnings
+
+Se reforzaron conocimientos de typescript
+
+### Added
+
+No se agregaron funciones, sin embargo se mejoraron las que ya se tienen para filtrar y ordenar. 
+
+### Changed
+
+Se mejora la estructura de las funciones de filtrar y ordenar. 
+
+### Fixed
+
+Se hace uso de modularización en el código
+
+### Removed
+
+No se eliminaron secciones ni funciones. 
