@@ -1,0 +1,89 @@
+.sidebar-generos {
+  height: 100vh;
+  width: 16rem;
+  position: fixed;
+  right: 0; /* Ajuste para colocar la barra lateral a la derecha */
+  top: 0;
+}
+.sidebar-title {
+  text-align: center;
+  padding-top: 8px;
+  font-size: 20px;
+  color: #fff;
+}
+.contenedor-generos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  color: #fff;
+  margin-top: 60px;
+  margin-left: 10px;
+}
+.contenedor-generos button {
+  font-size: 0.9rem;
+  width: 90px;
+  padding: 3px;
+  border: none;
+}
+.btn {
+  background-color: rgb(24, 40, 66);
+  color: #fff;
+}
+.btn:hover {
+  background-color: rgb(207, 110, 19);
+  color: black;
+  transform: scale(1.1);
+}
+.active {
+  background-color: rgb(166, 136, 13);
+  color: black;
+}
+.sidebar-año {
+  text-align: center;
+  padding-top: 30px;
+  font-size: 20px;
+  color: #fff;
+}
+.container-inputs {
+  display: flex;
+  align-items: center;
+  padding-top: 10px;
+}
+.sidebar-input {
+  width: 100%;
+  padding: 10px 15px;
+  text-align: center;
+  margin: 10px;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+}
+
+button {
+  cursor: pointer;
+  border-radius: 6px;
+}
+.sidebar-ordenar {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+select {
+  width: 150px;
+  height: 30px;
+  border-radius: 6px;
+  border: none;
+  text-align: center;
+  font-size: 14px;
+  background-color: rgb(197, 103, 31);
+}
+select:hover {
+  background-color: rgb(173, 67, 22);
+  color: black;
+  transform: scale(1.1);
+}
