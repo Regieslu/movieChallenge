@@ -1,13 +1,13 @@
 //Importamos diferentes funciones de react
 import { useEffect, useState } from "react";
-import { Genres } from "../Components/Interfaces"; // Importamos el tipo de dato Genre
+import { Genres } from "../Interface/Interfaces"; // Importamos el tipo de dato Genre
 import { getGenres } from "../Components/Common/GetGenders"; // Importamos el servicio getGenres que nos trae los generos de la API
 import "../styles/sidebar.css"
 
-/* Define los tipos de propiedades(props) que espera recibir el sidebar */
+
 interface SidebarProps {
   setGender: (gender: number) => void; // Funcion que setea el genero a filtrar.
-  gender: number; //Genero actual tipo number.
+  gender: number; //Genero de tipo number.
   setSortBy: (sortBy: string) => void; // Funcion que setea el ordenamiento de tipo string
 }
 
@@ -26,7 +26,7 @@ export default function Sidebar(props: SidebarProps) {
         })); //Seteamos los valores de la API en la variable genres
       })
       .catch((error) => console.error(error));
-  }, );
+  }, []);
 
   return (
     <div className="sidebar-generos">
@@ -38,6 +38,7 @@ export default function Sidebar(props: SidebarProps) {
             i: number // Itero la variable genres y para cada genre renderizo un boton con su nombre
           ) => (
             <button
+              disabled={genre.id === props.gender}
               className={genre.id === props.gender ? "btn active" : "btn"}
               onClick={() => {
                 props.setGender(genre.id);

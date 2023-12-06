@@ -1,10 +1,10 @@
 import axios, { AxiosResponse } from "axios";
 
 // Importa el tipo Genres del archivo que lo define (reemplaza la ruta con la correcta)
-import { Genres } from "../Interfaces";
+import { Genres } from "../../Interface/Interfaces";
 
 // Esta función obtiene los géneros de la API y los retorna como un array de Genres
-export const getGenres = (): Promise<Genres[]> => {
+export const getGenres = (): Promise<Genres[]> => { //esta promesa retorna un array de generos. 
   return new Promise((resolve, reject) => {
     const options = {
       method: "GET",

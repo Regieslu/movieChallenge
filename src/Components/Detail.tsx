@@ -1,4 +1,4 @@
-import { Genres, MovieResult } from "../Components/Interfaces"
+import { Genres, MovieResult } from "../Interface/Interfaces"
 
 interface Props {
   selected: MovieResult;
