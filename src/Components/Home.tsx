@@ -1,28 +1,37 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import Search from "../Components/Common/Search";
 import Detail from "./Detail";
 import Pagination from "./Common/pagination";
-import { MovieCatalog, MovieResult } from "../Components/Interfaces"
+import { MovieCatalog, MovieResult } from "../Interface/Interfaces"
 import Sidebar from "./Filters";
-
-// state = {
-// movieName: "",
-// results: [] as MovieCatalog[],
-// selected: {} as MovieResult
-//}
 
 function Home() { //componente padre de sarch y detail 
   //utilizamos el hook useState para gestionar el estado del componente
-  const [currentPage, setCurrentPage] = useState(1) //currentPage es mi variable de estado y setCurrentPage establece el estado
+  const [currentPage, setCurrentPage] = useState(1) //el valor inicial de cuppentPage es (1)
+  const [genres, setGenres] = useState(28);
+  const [sortBy, setSortBy] = useState("popularity.desc")
   const [state, setState] = useState({
     movieName: "",
     results: [] as MovieCatalog[],
     selected: {} as MovieResult,
   });
-  const apiurl = "https://api.themoviedb.org/3"; //Define la URL base de la API
-  const initialCatalog = "/trending/movie/day?language=en-US";// obtenemos pelis populares
 
+  useEffect(() => { //useEffect ejecuta getHome una vez cargada la página x 1ra vez y se vuelve a ejecutar si alguna de sus dependencias cambia
+    getHome().then(data => { //getList from API
+      setState((prevState) => {
+        return { ...prevState, results: data.results };
+      });
+    }).catch((error) => console.error(error));
+  }, [genres, sortBy, currentPage]);
+
+  const getHome = () => {
+    return axios(urlWithCriteria, {
+      headers: headers,
+    },).then(({ data }) => data);
+  }
+  const apiurl = "https://api.themoviedb.org/3"; //Define la URL base de la API
+  const urlWithCriteria = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=es-US&page=${currentPage}&with_genres=${genres}&sort_by=${sortBy}`;
   const headers = {
     accept: 'application/json',
     Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkOWY0YWY5N2NjOTc2MjNjZTkxYjM1YmVmOWVlMzJiZCIsInN1YiI6IjY1NTUwMjdiYjU0MDAyMDBhYzk4NWI3OCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.XcHfTme4sZ3N4y-sPoNwbTzDK9FFm3xi-q2zYXfKlwo'
@@ -45,12 +54,11 @@ function Home() { //componente padre de sarch y detail
       axios(apiurl + "/search/movie?query=" + state.movieName, {
         headers: headers
       }).then(
-        ({ data }) => { // buscamos en la data
-          const results: MovieCatalog[] = data.results;
+        ({ data }) => {
           setState((prevState) => {
             return {
               ...prevState,
-              results: results,
+              results: data.results,
             };
           });
         }
@@ -65,7 +73,7 @@ function Home() { //componente padre de sarch y detail
     }).then(({ data }) => {
       const result = data as MovieResult
       setState((prevState) => {
-        return { ...prevState, selected: result };//obtenemos data
+        return { ...prevState, selected: result };
       });
     });
   };
@@ -76,44 +84,20 @@ function Home() { //componente padre de sarch y detail
     });
   };
 
-  //esta función nos ayuda a actualizar la página actual obteniendo la lista de 
-  //peliculas correspondientes a la página 
-  const updatePageAndCatalog = (page: number) => {
-    setCurrentPage(page);
-    axios(apiurl + `${initialCatalog}&page=${page}`, {
-      headers: headers,
-    }).then(({ data }) => {
-      setState((prevState) => {
-        return { ...prevState, results: data.results };
-      });
-    });
-  }
-
-  // obtenemos la lista inicial de las peliculas populares
-  const getHomeCatalog = () => {
-    axios(apiurl + initialCatalog, {
-      headers: headers,
-    }).then(({ data }) => {
-      setState((prevState) => {
-        return { ...prevState, results: data.results };
-      });
-    });
-  }
-
   return (
     <div className="App">
       <header className="App-header">
         <h1>Cine Movie</h1>
       </header>
       <main>
-        <Search
-          searchInput={searchInput}
+        <Search //mi componente 
+          searchInput={searchInput} //propiedades de search
           search={search}
         />
         <Sidebar
-          setGender={(gender: number) => { console.log(gender) }}
-          gender={1}
-          setSortBy={(sortBy: string) => { console.log(sortBy) }} />
+          setGender={(genre: number) =>  setGenres(genre) }
+          gender={genres}
+          setSortBy={(sortBy: string) => setSortBy(sortBy) } />
         <div className="container">
           {state.results.length && state.results.map((e: MovieCatalog) => (
             <div
@@ -134,11 +118,6 @@ function Home() { //componente padre de sarch y detail
             </div>
           ))}
         </div>
-
-        {!state.results.length &&
-          getHomeCatalog()
-        }
-
         {typeof state.selected.original_title !=
           "undefined" ? (
           <>
@@ -150,7 +129,7 @@ function Home() { //componente padre de sarch y detail
           false
         )}
         <Pagination
-          setPage={(page) => updatePageAndCatalog(page)} page={currentPage}
+          setPage={(page) => setCurrentPage(page)} page={currentPage}
         />
       </main>
     </div>
